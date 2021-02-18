@@ -7,6 +7,7 @@ library(modelr)
 
 scout <- read_csv("hackathon_scouting.csv") # You'll have to change this part if you don't have the file locally
 
+# clean up the data a little bit
 scout <- scout %>%
   janitor::clean_names()
 
@@ -98,7 +99,7 @@ scout <- scout %>%
   add_predictions(pass_glm, var = "pass_success_prob", type = "response") %>%
   mutate(decision = (xG_2 * pass_success_prob) - xG)
 
-# Aggregate the data
+# Aggregate the data at player level
 
 scout %>%
   filter(!is.na(decision), x_coordinate_2 >= 125) %>%
@@ -109,6 +110,8 @@ scout %>%
   arrange(desc(success_rate)) %>%
   filter(count > 40) %>%
   head(10)
+
+# Aggredate data at team level
 
 scout %>%
   filter(!is.na(decision), x_coordinate_2 >= 125) %>%
